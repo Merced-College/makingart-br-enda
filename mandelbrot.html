@@ -3,6 +3,9 @@
 <body>
 <canvas id='c' width='800' height='600'></canvas>
 <script>
+const red = [66, 25, 9, 0, 255];
+const green = [30, 7, 1, 100, 255];
+const blue = [15, 26, 47, 100, 255];
 const canvas = document.getElementById('c');
 const ctx = canvas.getContext('2d');
 const img = ctx.createImageData(800, 600);
@@ -20,10 +23,10 @@ for (let y = 0; y < 600; y++) {
       zx = tmp;
       iter--;
     }
-    let color = iter | (iter << 8);
-    data[i++] = (color >> 16) & 255;
-    data[i++] = (color >> 8) & 255;
-    data[i++] = color & 255;
+    let index = iter % 5;
+    data[i++] = red[index];
+    data[i++] = green[index];
+    data[i++] = blue[index];
     data[i++] = 255;
   }
 }

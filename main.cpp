@@ -1,6 +1,13 @@
 #include <iostream>
 #include <fstream>
 
+// added palette_size
+const int PALETTE_SIZE = 5;
+
+int red[PALETTE_SIZE]   = { 66, 25,  9,   0, 255 };
+int green[PALETTE_SIZE] = { 30,  7,  1,   100, 255 };
+int blue[PALETTE_SIZE]  = { 15, 26, 47, 100, 255 };
+
 int main() {
     const int WIDTH = 800;
     const int HEIGHT = 600;
@@ -15,6 +22,15 @@ int main() {
     out << "<!DOCTYPE html>\n<html>\n<body>\n";
     out << "<canvas id='c' width='" << WIDTH << "' height='" << HEIGHT << "'></canvas>\n";
     out << "<script>\n";
+    out << "const red = [" << red[0];
+    for(int i=1; i<PALETTE_SIZE; i++) out << ", " << red[i];
+    out << "];\n";
+    out << "const green = [" << green[0];
+    for(int i=1; i<PALETTE_SIZE; i++) out << ", " << green[i];
+    out << "];\n";
+    out << "const blue = [" << blue[0];
+    for(int i=1; i<PALETTE_SIZE; i++) out << ", " << blue[i];
+    out << "];\n";
     out << "const canvas = document.getElementById('c');\n";
     out << "const ctx = canvas.getContext('2d');\n";
     out << "const img = ctx.createImageData(" << WIDTH << ", " << HEIGHT << ");\n";
@@ -36,14 +52,14 @@ int main() {
     out << "      iter--;\n";
     out << "    }\n";
 
-    // Color 
-    out << "    let color = iter | (iter << 8);\n";
-    out << "    data[i++] = (color >> 16) & 255;\n";
-    out << "    data[i++] = (color >> 8) & 255;\n";
-    out << "    data[i++] = color & 255;\n";
+    // Sets the color in the image
+    out << "    let index = iter % " << PALETTE_SIZE << ";\n";
+    out << "    data[i++] = red[index];\n";
+    out << "    data[i++] = green[index];\n";
+    out << "    data[i++] = blue[index];\n";
     out << "    data[i++] = 255;\n";   // alpha
     out << "  }\n";
-    out << "}\n";
+    out << "}\n"; 
 
     out << "ctx.putImageData(img, 0, 0);\n";
     out << "</script>\n</body>\n</html>\n";
